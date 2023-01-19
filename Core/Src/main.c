@@ -118,7 +118,7 @@ int main(void)
 	  if (HAL_BUSY!=hal_spi_status)
 	  switch(hal_spi_status){
 	  case HAL_TIMEOUT:
-		  snprintf(debug_mesg, 256, " <timeout> \n ");
+		  // snprintf(debug_mesg, 256, " <timeout> \n ");
 		  break;
 	  case HAL_OK:
 		  snprintf(debug_mesg, 256, "received: %X %X %X %X\n", recv_SPI_buff[0], recv_SPI_buff[1], recv_SPI_buff[2], recv_SPI_buff[3]);
