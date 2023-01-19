@@ -1,0 +1,9 @@
+#i Compiler output
+.o
+.elf
+.list
+.map
+
+# Binary output folders
+Debug/
+Release/
