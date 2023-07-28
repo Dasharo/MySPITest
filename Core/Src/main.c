@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
@@ -70,6 +71,16 @@ int _write(int file, char *ptr, int len)
 	 }
 	 return len;
  }
+
+int __io_putchar(int ch)
+{
+	// Write character to ITM ch.0
+	ITM_SendChar(ch);
+	return(ch);
+}
+
+void app_main();
+
 /* USER CODE END 0 */
 
 /**
@@ -79,10 +90,8 @@ int _write(int file, char *ptr, int len)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint8_t recv_SPI_buff[255];
-	char debug_mesg[255];
-	int hal_spi_status;
-	char* strPtr;
+	//uint8_t recv_SPI_buff[255];
+	//int hal_spi_status;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -104,9 +113,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
+  printf("SPI starting\n");
+  app_main();
 
   /* USER CODE END 2 */
 
@@ -114,6 +126,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+
+#if 0
 	  hal_spi_status = HAL_SPI_Receive(&hspi2, recv_SPI_buff, 4, 10);
 	  if (HAL_BUSY!=hal_spi_status)
 	  switch(hal_spi_status){
@@ -121,15 +136,13 @@ int main(void)
 		  // snprintf(debug_mesg, 256, " <timeout> \n ");
 		  break;
 	  case HAL_OK:
-		  snprintf(debug_mesg, 256, "received: %X %X %X %X\n", recv_SPI_buff[0], recv_SPI_buff[1], recv_SPI_buff[2], recv_SPI_buff[3]);
-		  strPtr=debug_mesg;
-		  while(*strPtr != 0)
-			  ITM_SendChar(*strPtr++);
+		  printf("received: %X %X %X %X\n", recv_SPI_buff[0], recv_SPI_buff[1], recv_SPI_buff[2], recv_SPI_buff[3]);
 		  break;
 	  case HAL_ERROR:
-		  snprintf(debug_mesg, 256, " <SPI error>\n");
+		  printf(" <SPI error>\n");
 		  break;
 	  }
+#endif
 
 
     /* USER CODE END WHILE */
